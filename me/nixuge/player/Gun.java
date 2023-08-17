@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.nixuge.GameManager;
 import me.nixuge.PlayerManager;
 import me.nixuge.ShootCraft;
 import me.nixuge.config.Config;
@@ -24,11 +25,14 @@ public class Gun {
 
     private World world;
     private ShootingPlayer player;
+    private GameManager gameMgr;
     private PlayerManager playerMgr;
 
     public Gun(ShootingPlayer player) {
         this.world = Config.map.getWorld();
-        this.playerMgr = ShootCraft.getInstance().getPlayerMgr();
+        ShootCraft instance = ShootCraft.getInstance();
+        this.playerMgr = instance.getPlayerMgr();
+        this.gameMgr = instance.getGameMgr();
         this.player = player;
     }
 
@@ -39,6 +43,7 @@ public class Gun {
     // public Set<ShootingPlayer> fire(GameManager gameMgr, Player p) {
     public void fire() {
         // Set<Entity> hitPlayers = new HashSet<>();
+        int hitCount = 0;
 
         // values straight from the player
         Player p = player.getBukkitPlayer();
@@ -76,8 +81,17 @@ public class Gun {
             }
                 
             for (Entity e : nearbyEntities) {
-                if (e instanceof Player)
-                    playerMgr.getShootingPlayer((Player)e).hit();
+                if (e instanceof Player) {
+                    playerMgr.getShootingPlayer((Player)e).hit(player.getBukkitPlayer().getCustomName());
+                    hitCount++;
+                }
+                    
+            }
+        }
+        if (hitCount > 1) {
+            gameMgr.broadcastGamePrefix(p.getCustomName() + " killed " + hitCount + " people in a single shot !");
+            if (Config.lives.isLiveOnDoubleKill()) {
+                player.addLife();
             }
         }
     }

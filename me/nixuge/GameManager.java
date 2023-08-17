@@ -3,6 +3,7 @@ package me.nixuge;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import me.nixuge.config.Config;
 import me.nixuge.enums.GameState;
 import me.nixuge.player.ShootingPlayer;
 
@@ -19,6 +20,10 @@ public class GameManager {
     public void broadcastGame(String message) {
         for (ShootingPlayer p : playerMgr.getOnlinePlayers())
             p.getBukkitPlayer().sendMessage(message);
+    }
+    public void broadcastGamePrefix(String message) {
+        for (ShootingPlayer p : playerMgr.getOnlinePlayers())
+            p.getBukkitPlayer().sendMessage(Config.game.getBroadcastPrefix() + message);
     }
 
     public void startGame() {

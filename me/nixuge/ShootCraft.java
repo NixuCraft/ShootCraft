@@ -46,4 +46,13 @@ public class ShootCraft extends JavaPlugin {
 
         Bukkit.broadcastMessage("PLugin enablezd");
     }
+
+    // LEFT TODO FROM CONFIG:
+    // - maxGameDuration
+    // - maxPlayerCount
+    // - halfHungerLossOnBoost
+    //
+    // - all delays
+    //
+    // - spawns
 }

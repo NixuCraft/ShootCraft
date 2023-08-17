@@ -17,6 +17,8 @@ public class ShootingPlayer {
 
     private int currentLives;
     private int killStreak;
+    @Getter
+    private int totalKills;
 
     @Getter
     private Player bukkitPlayer;
@@ -30,14 +32,14 @@ public class ShootingPlayer {
         this.boost = new Boost(this);
         // Not sure if that should be in the constructor
         setMaxHealth();
-        setHealth(true);
+        setHealthRespawn(true);
     }
 
     // Bit verbose but yeah idk this should be fine
     private void setMaxHealth() {
         bukkitPlayer.setMaxHealth(Config.lives.getMaxLives() * 2);
     }
-    private void setHealth(boolean initialSpawn) {
+    private void setHealthRespawn(boolean initialSpawn) {
         int newHealth = (initialSpawn) ?
             Config.lives.getRespawnLives() * 2 :
             Config.lives.getStartingLives() * 2;
@@ -45,14 +47,12 @@ public class ShootingPlayer {
         bukkitPlayer.setHealth(newHealth);
     }
 
-
-
     public void rejoin(Player player) {
         this.bukkitPlayer = player;
         this.isOnline = true;
         // May need to be delayed 1 tick
         setMaxHealth();
-        setHealth(false);
+        setHealthRespawn(false);
     }
 
     public void leave() {
@@ -60,18 +60,33 @@ public class ShootingPlayer {
         this.isOnline = false;
     }
 
-    public void incrementKillStreak() {
+    public void addKill() {
+        this.totalKills++;
         this.killStreak++;
         if (Config.lives.getLiveOnKillStreak().contains(killStreak))
-            gameMgr.broadcastGame("§c[ShootCraft]§r " + bukkitPlayer.getCustomName() + " got a killstreak of " + killStreak + ". He gained a life.");
+            gameMgr.broadcastGamePrefix(bukkitPlayer.getCustomName() + " got a killstreak of " + killStreak + ". He gained a life.");
+
+        if (Config.game.isKfwEnabled() && Config.game.getKillsForWin() >= totalKills) {
+            gameMgr.broadcastGamePrefix("§l§6GAME ENDED !");
+            // TODO: end game here
+        }
     }
 
-    public void hit() {
-        if (this.currentLives == 1)
+    public void addLife() {
+        if (this.currentLives >= Config.lives.getMaxLives())
+            return;
+        this.currentLives++;
+        bukkitPlayer.setHealth(currentLives * 2);
+        // TODO: add chestplate
+    }
+
+    public void hit(String killer) {
+        if (this.currentLives == 1) {
             kill();
-        else {
-            bukkitPlayer.setHealth(currentLives * 2);
+            gameMgr.broadcastGame(bukkitPlayer.getCustomName() + " §cgot killed by " + killer);
+        } else {
             this.currentLives--;
+            bukkitPlayer.setHealth(currentLives * 2);
         }
     }
 
@@ -79,7 +94,7 @@ public class ShootingPlayer {
         gun.setDelay(Config.delay.getRespawnDuration());
         this.currentLives = Config.lives.getStartingLives();
         this.killStreak = 0;
-        setHealth(false);
+        setHealthRespawn(false);
 
         // TODO: finish (respawn etc)
     }

@@ -14,6 +14,7 @@ game:
   maxGameDuration: 180 #in seconds
   maxPlayerCount: 90
   halfHungerLossOnBoost: 10 # half hunger losses, multiply normal hunger by 2
+  broadcastPrefix: "§c[ShootCraft]§r "
   
 lives:
   startingLives: 1
