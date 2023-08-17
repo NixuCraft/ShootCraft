@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import lombok.Getter;
 import me.nixuge.ShootCraft;
 import me.nixuge.listeners.playing.HotbarItemHeldListener;
+import me.nixuge.listeners.playing.PlayerClickListener;
+import me.nixuge.listeners.playing.PlayerJoinLeaveListener;
 import me.nixuge.utils.logger.LogLevel;
 import me.nixuge.utils.logger.Logger;
 
@@ -18,7 +20,9 @@ public enum GameState {
 
     }),
     PLAYING(new Class<?>[] {
-        HotbarItemHeldListener.class
+        HotbarItemHeldListener.class,
+        PlayerClickListener.class,
+        PlayerJoinLeaveListener.class
     });
 
     private final Class<?>[] classes;
@@ -47,6 +51,7 @@ public enum GameState {
     private static GameState currentState;
     public static void setGameState(GameState gameState) {
         Logger.log(LogLevel.DEBUG, "Setting gamestate to " + gameState.toString());
+
         // unregister previous listeners
         if (currentState != null) {
             for (Listener listener : currentState.getInstances()) {
@@ -54,7 +59,6 @@ public enum GameState {
             }
             currentState.clearInstances();
         }
-
 
         // set new state var
         currentState = gameState;
@@ -67,7 +71,7 @@ public enum GameState {
                 Constructor<?> cons = c.getConstructor();
                 Listener listener = (Listener) cons.newInstance();
                 currentState.addInstance(listener);
-                instance.getPluginManager().registerEvents(listener, instance);
+                instance.getPluginMgr().registerEvents(listener, instance);
                 Logger.log(LogLevel.DEBUG, "Registered listener: " + c.getSimpleName());
             }
         } catch (Exception e) {

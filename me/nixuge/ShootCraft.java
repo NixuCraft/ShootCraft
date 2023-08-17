@@ -13,7 +13,12 @@ public class ShootCraft extends JavaPlugin {
     @Getter
     private static ShootCraft instance;
     @Getter
-    private PluginManager pluginManager;
+    private PluginManager pluginMgr;
+    @Getter
+    private GameManager gameMgr;
+    @Getter
+    private PlayerManager playerMgr;
+
 
     @Override
     public void onDisable() {
@@ -22,9 +27,14 @@ public class ShootCraft extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
         saveDefaultConfig();
         Config.init(getConfig());
-        pluginManager = getServer().getPluginManager();
+
+        pluginMgr = getServer().getPluginManager();
+
+        playerMgr = new PlayerManager();
+        gameMgr = new GameManager();
         
         GameState.setGameState(GameState.IDLING);
 

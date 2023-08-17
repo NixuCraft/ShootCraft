@@ -15,11 +15,10 @@ public class ForceStartCommand implements CommandExecutor {
     public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
         Logger.logBC("Force starting game");
 
-        // TODO: START GAME HERE
         if (GameState.getCurrentState() == GameState.PLAYING) {
-            GameState.setGameState(GameState.IDLING);
+            instance.getGameMgr().stopGame();
         } else {
-            GameState.setGameState(GameState.PLAYING);
+            instance.getGameMgr().startGame();
         }
 
         return true;
