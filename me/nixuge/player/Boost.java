@@ -1,4 +1,4 @@
-package me.nixuge.players;
+package me.nixuge.player;
 
 public class Boost {
     private ShootingPlayer player;

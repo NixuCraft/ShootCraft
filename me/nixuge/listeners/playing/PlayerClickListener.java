@@ -6,9 +6,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.nixuge.PlayerManager;
 import me.nixuge.ShootCraft;
-import me.nixuge.players.Boost;
-import me.nixuge.players.Gun;
-import me.nixuge.players.ShootingPlayer;
+import me.nixuge.player.Boost;
+import me.nixuge.player.Gun;
+import me.nixuge.player.ShootingPlayer;
 
 public class PlayerClickListener implements Listener {
     private PlayerManager playerMgr = ShootCraft.getInstance().getPlayerMgr();

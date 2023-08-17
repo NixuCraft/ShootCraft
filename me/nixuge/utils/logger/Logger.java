@@ -3,8 +3,6 @@ package me.nixuge.utils.logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import me.nixuge.utils.TextUtils;
-
 public class Logger {
     private static java.util.logging.Logger logger = Bukkit.getLogger();
 
@@ -14,14 +12,6 @@ public class Logger {
      */
     public static void log(String message) {
         log(LogLevel.INFO, message);
-    }
-
-    /**
-     * Log a message to the console & to players in-game using the INFO LogLevel
-     * @param message the message to log
-     */
-    public static void logIG(String message) {
-        logIG(LogLevel.INFO, message);
     }
 
     /**
@@ -39,16 +29,6 @@ public class Logger {
      */
     public static void log(LogLevel level, String message) {
         logger.log(level.getLevel(), level.getColorMessageTerm(message));
-    }
-
-    /**
-     * Log a message to the console & to players in-game
-     * @param level level to log the message to (eg: Info, Warning, ...)
-     * @param message the message to log
-     */
-    public static void logIG(LogLevel level, String message) {
-        logger.log(level.getLevel(), level.getColorMessageTerm(message));
-        TextUtils.broadcastGame(level.getColorMessageGame(message));
     }
 
     /**

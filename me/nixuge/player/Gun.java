@@ -1,4 +1,4 @@
-package me.nixuge.players;
+package me.nixuge.player;
 
 import java.util.Collection;
 
@@ -68,15 +68,16 @@ public class Gun {
                 // If hits wall (may be bypassable if through corners)
                 continue;
             }
+
             Collection<Entity> nearbyEntities = world.getNearbyEntities(loc, .3, .3, .3); // VALUES TO TWEAK
-            if( nearbyEntities == null) {
-                Logger.logBC("GOT NULL!");
+            if (nearbyEntities == null) {
+                Logger.logBC("GOT NULL! (to remove in prod)");
                 continue;
             }
                 
             for (Entity e : nearbyEntities) {
                 if (e instanceof Player)
-                    playerMgr.getShootingPlayer((Player)e).kill();
+                    playerMgr.getShootingPlayer((Player)e).hit();
             }
         }
     }

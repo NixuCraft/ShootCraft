@@ -17,6 +17,7 @@ game:
   
 lives:
   startingLives: 1
+  respawnLives: 1
   maxLives: 3
   liveOnDoubleKill: true
   liveOnKillStreak: [4, 8, 10, 15] #killstreaks on which you'll get a new life

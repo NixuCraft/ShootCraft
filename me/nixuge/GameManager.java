@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.nixuge.enums.GameState;
+import me.nixuge.player.ShootingPlayer;
 
 public class GameManager {
     private ShootCraft shootCraft;
@@ -13,6 +14,11 @@ public class GameManager {
         shootCraft = ShootCraft.getInstance();
         playerMgr = shootCraft.getPlayerMgr();
         GameState.setGameState(GameState.IDLING);
+    }
+
+    public void broadcastGame(String message) {
+        for (ShootingPlayer p : playerMgr.getOnlinePlayers())
+            p.getBukkitPlayer().sendMessage(message);
     }
 
     public void startGame() {
