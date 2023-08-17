@@ -1,0 +1,8 @@
+name: ShootCraft
+version: 0.1
+author: Nixuge
+main: me.nixuge.ShootCraft
+commands:
+  force_start:
+    description: force start the game /!\DEV ONLY/!\
+    usage: /force_start

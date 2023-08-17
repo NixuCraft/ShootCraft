@@ -1,0 +1,21 @@
+map: #use "<x> <y> <z>" only unless stated otherwise
+  world: world
+  spawns:
+  - 100 10 100
+  - 120 10 120
+
+delays: # in ticks
+  ticksPerHalfHungerRegain: 10
+  spawnProtectionDuration: 10 #500ms, seems reasonable
+
+game:
+  killsForWin: 0 #0 (or less) for unlimited
+  maxGameDuration: 180 #in seconds
+  maxPlayerCount: 90
+  halfHungerLossOnBoost: 10 # half hunger losses, multiply normal hunger by 2
+  
+lives:
+  startingLives: 1
+  maxLives: 3
+  liveOnDoubleKill: true
+  liveOnKillStreak: [4, 8, 10, 15] #killstreaks on which you'll get a new life
