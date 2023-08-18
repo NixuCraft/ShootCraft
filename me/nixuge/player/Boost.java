@@ -7,7 +7,6 @@ import me.nixuge.ShootCraft;
 import me.nixuge.config.Config;
 import me.nixuge.utils.TextUtils;
 import me.nixuge.utils.TitleUtils;
-import me.nixuge.utils.logger.Logger;
 
 public class Boost {
     private ShootCraft instance;
@@ -33,7 +32,6 @@ public class Boost {
             public void run() {
                 delay--;
                 TitleUtils.sendActionBar(player.getBukkitPlayer(), "§eBoost time: " + TextUtils.ticksToSeconds(newDelay) + "s");
-                Logger.logBC("lowered timer ! (boost) " + delay);
                 if (delay == 0)
                     this.cancel();
             }

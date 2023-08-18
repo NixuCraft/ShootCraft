@@ -21,7 +21,7 @@ public class Config {
     public static void init(FileConfiguration conf) {
         Config.fileConf = conf;
         delay = new DelayConfig(getFileConfigBlock("delays"));
-        game = new GameConfig(getFileConfigBlock("map"));
+        game = new GameConfig(getFileConfigBlock("game"));
         lives = new LivesConfig(getFileConfigBlock("lives"));
         map = new MapConfig(getFileConfigBlock("map"));
     }

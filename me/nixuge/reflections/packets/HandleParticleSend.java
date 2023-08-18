@@ -41,14 +41,14 @@ public class HandleParticleSend extends ReflectionUtilsAbstract {
     private ParticleEnum particle;
     private float x, y, z;
     private float xPlus, yPlus, zPlus;
-    private int speed = 0; // not needed (as of now)
+    private int speed;
     private int count;
     private int[] data;
 
     public HandleParticleSend(ParticleEnum particle,
             double x, double y, double z,
             double xPlus, double yPlus, double zPlus,
-            int count, int[] data) {
+            int speed, int count, int[] data) {
         this.particle = particle;
         this.x = (float) x;
         this.y = (float) y;
@@ -56,6 +56,7 @@ public class HandleParticleSend extends ReflectionUtilsAbstract {
         this.xPlus = (float) xPlus;
         this.yPlus = (float) yPlus;
         this.zPlus = (float) zPlus;
+        this.speed = speed;
         this.count = count;
         this.data = data;
     }

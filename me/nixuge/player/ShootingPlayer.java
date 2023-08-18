@@ -36,27 +36,32 @@ public class ShootingPlayer {
         this.isOnline = true;
         this.gun = new Gun(this);
         this.boost = new Boost(this);
-        initialSpawn();
+        this.respawnManager = new RespawnManager(this);
+        initPlayer();
     }
 
     private void setMaxHealth() {
         bukkitPlayer.setMaxHealth(Config.lives.getMaxLives() * 2);
     }
-
-    public void initialSpawn() {
-        this.currentLives = Config.lives.getStartingLives();
-        this.killStreak = 0;
+ 
+    private void onInitOrRelog() {
         setMaxHealth();
-        respawnManager.initialSpawn();
+        bukkitPlayer.getInventory().setHeldItemSlot(4);
     }
 
-    // Bit verbose but yeah idk this should be fine
+    public void initPlayer() {
+        this.currentLives = Config.lives.getStartingLives();
+        this.killStreak = 0;
+        onInitOrRelog();
+        bukkitPlayer.setFoodLevel(20 - Config.game.getHungerLossOnBoost());
+        respawnManager.initialSpawn();
+    }
 
     public void rejoin(Player player) {
         this.bukkitPlayer = player;
         this.isOnline = true;
-        // May need to be delayed 1 tick
-        setMaxHealth();
+        
+        onInitOrRelog(); // May need to be delayed 1 tick
 
         bukkitPlayer.getInventory().clear();
 
@@ -72,7 +77,7 @@ public class ShootingPlayer {
         this.totalKills++;
         this.killStreak++;
         if (Config.lives.getLiveOnKillStreak().contains(killStreak))
-            gameMgr.broadcastGamePrefix(bukkitPlayer.getCustomName() + " got a killstreak of " + killStreak + ". He gained a life.");
+            gameMgr.broadcastGamePrefix(bukkitPlayer.getDisplayName() + " got a killstreak of " + killStreak + ". He gained a life.");
 
         if (Config.game.isKfwEnabled() && Config.game.getKillsForWin() >= totalKills) {
             gameMgr.broadcastGamePrefix("§l§6GAME ENDED !");
@@ -88,17 +93,23 @@ public class ShootingPlayer {
         // TODO: add chestplate
     }
 
-    public void hit(String killer) {
+
+    /**
+     * @param killer name of the killer
+     * @return true if the hit was performed, false if the player was protected.
+     */
+    public boolean hit(String killer) {
         if (this.isProtected)
-            return;
+            return false;
             
         if (this.currentLives == 1) {
             kill();
-            gameMgr.broadcastGame(bukkitPlayer.getCustomName() + " §cgot killed by " + killer);
+            gameMgr.broadcastGame(bukkitPlayer.getDisplayName() + " §cgot killed by " + killer);
         } else {
             this.currentLives--;
             bukkitPlayer.setHealth(currentLives * 2);
         }
+        return true;
     }
 
     private void kill() {

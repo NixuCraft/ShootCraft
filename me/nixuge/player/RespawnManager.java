@@ -22,7 +22,7 @@ public class RespawnManager {
     public void initialSpawn() {
         Player p = player.getBukkitPlayer();
         p.getInventory().clear();
-        p.getInventory().setItem(31, Gun.getItemEnabled());
+        p.getInventory().setItem(4, Gun.getItemEnabled());
 
         player.setProtected(true);
 
@@ -75,7 +75,7 @@ public class RespawnManager {
             public void run() {
                 tempTicks--;
                 if (tempTicks == 0) {
-                    
+                    player.setProtected(false);
                     this.cancel();
                 }
             }

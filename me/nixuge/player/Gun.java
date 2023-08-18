@@ -1,6 +1,8 @@
 package me.nixuge.player;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,19 +46,18 @@ public class Gun {
     }
 
     public void onRespawn() {
-        player.getBukkitPlayer().getInventory().setItem(31, Gun.getItemDisabled());
         setDelay(Config.delay.getRespawnDuration());
     }
  
     public void setDelay(int newDelay) {
+        player.getBukkitPlayer().getInventory().setItem(4, Gun.getItemDisabled());
         this.delay = newDelay;
         new BukkitRunnable() {
             @Override
             public void run() {
                 delay--;
-                Logger.logBC("lowered timer ! (gun) " + delay);
                 if (delay == 0) {
-                    player.getBukkitPlayer().getInventory().setItem(31, Gun.getItemDisabled());
+                    player.getBukkitPlayer().getInventory().setItem(4, Gun.getItemEnabled());
                     this.cancel();
                 }   
             }
@@ -70,8 +71,10 @@ public class Gun {
     // public Set<ShootingPlayer> fire(GameManager gameMgr, Player p) {
     public void fire() {
         setDelay(Config.delay.getGunDelayDuration());
-        // Set<Entity> hitPlayers = new HashSet<>();
-        int hitCount = 0;
+        
+        Set<Player> hitPlayers = new HashSet<>();
+        String name = player.getBukkitPlayer().getDisplayName();
+        // int hitCount = 0;
 
         // values straight from the player
         Player p = player.getBukkitPlayer();
@@ -83,41 +86,48 @@ public class Gun {
         double z = loc.getZ();
 
         // values computed
-        double yMinus = Math.sin(Math.toRadians(pitch));
+        double yMinus = Math.sin(Math.toRadians(pitch)) / 2;
         double yMultiply = getYMultiplyOffset(yMinus);
-        double xMinus = Math.sin(Math.toRadians(yaw)) * yMultiply;
-        double zPlus = Math.cos(Math.toRadians(yaw)) * yMultiply;
+        double xMinus = (Math.sin(Math.toRadians(yaw)) * yMultiply) / 2;
+        double zPlus = (Math.cos(Math.toRadians(yaw)) * yMultiply) / 2;
 
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 120; i++) {
             x -= xMinus;
             z += zPlus;
             y -= yMinus;
 
-            new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 10, null)
+            new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null)
                     .sendPacketAllPlayers();
 
             loc = new Location(world, x, y, z);
             if (loc.getBlock().getType() != Material.AIR) {
                 // If hits wall (may be bypassable if through corners)
-                continue;
+                break;
             }
 
-            Collection<Entity> nearbyEntities = world.getNearbyEntities(loc, .3, .3, .3); // VALUES TO TWEAK
-            if (nearbyEntities == null) {
-                Logger.logBC("GOT NULL! (to remove in prod)");
-                continue;
-            }
+
+            // TODO: if possible, redo this detection in a better way
+            // Basically before the particles loop, calculate
+            // the players that have been hit.
+
+            Collection<Entity> nearbyEntities = world.getNearbyEntities(loc, .2, .2, .2); // VALUES TO TWEAK
+            
                 
             for (Entity e : nearbyEntities) {
-                if (e instanceof Player) {
-                    playerMgr.getShootingPlayer((Player)e).hit(player.getBukkitPlayer().getCustomName());
-                    hitCount++;
-                }
-                    
+                if (!(e instanceof Player)) 
+                    continue;
+
+                Player hitPlayer = (Player)e;
+                if (hitPlayers.contains(hitPlayer) || hitPlayer == p)
+                    continue;
+                
+                if(playerMgr.getShootingPlayer(hitPlayer).hit(name))
+                    hitPlayers.add(hitPlayer);  
             }
         }
+        int hitCount = hitPlayers.size();
         if (hitCount > 1) {
-            gameMgr.broadcastGamePrefix(p.getCustomName() + " killed " + hitCount + " people in a single shot !");
+            gameMgr.broadcastGamePrefix(p.getDisplayName() + " killed " + hitCount + " people in a single shot !");
             if (Config.lives.isLiveOnDoubleKill()) {
                 player.addLife();
             }

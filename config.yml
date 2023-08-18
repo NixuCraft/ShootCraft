@@ -7,7 +7,7 @@ map: #use "<x> <y> <z>" only unless stated otherwise
 delays: # in ticks
   ticksPerHalfHungerRegain: 10 # multiply by halfHungerLossOnBoost
   respawnDuration: 20 #1s, seems reasonable
-  gunDelayDuration: 50 #2.5s, seems reasonable
+  gunDelayDuration: 20 #1s, seems reasonable
   spawnProtectionDuration: 10 #500ms, seems reasonable
 
 game:

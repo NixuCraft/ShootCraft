@@ -7,7 +7,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import lombok.Getter;
 import me.nixuge.commands.ForceStartCommand;
 import me.nixuge.config.Config;
-import me.nixuge.enums.GameState;
 
 public class ShootCraft extends JavaPlugin {
     @Getter
@@ -35,9 +34,6 @@ public class ShootCraft extends JavaPlugin {
 
         playerMgr = new PlayerManager();
         gameMgr = new GameManager();
-        
-        GameState.setGameState(GameState.IDLING);
-
         // gameManager = new GameManager();
 
         getCommand("force_start").setExecutor(new ForceStartCommand());
@@ -53,8 +49,4 @@ public class ShootCraft extends JavaPlugin {
     // - halfHungerLossOnBoost
     //
     // - ticksPerHalfHungerRegain
-    // - spawnProtectionDuration
-    // - respawnDuration (not fully)
-    //
-    // - spawns
 }
