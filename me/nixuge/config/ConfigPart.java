@@ -5,8 +5,8 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.util.Vector;
 
-import me.nixuge.maths.XYZ;
 import me.nixuge.utils.logger.LogLevel;
 import me.nixuge.utils.logger.Logger;
 
@@ -80,11 +80,11 @@ public abstract class ConfigPart {
         return value;
     }
 
-    protected XYZ getXYZfromString(String str) {
+    protected Vector getVectorfromString(String str) {
         String[] parts = str.split(" ");
         if (parts.length < 3) {
             // Bukkit.broadcastMessage(Lang.get("errors.mapconfig.wrongparseXYZ1", parts.length, str));
-            return new XYZ(0, 0, 0);
+            return new Vector(0, 0, 0);
         }
 
         int[] xyz = new int[3];
@@ -99,7 +99,7 @@ public abstract class ConfigPart {
             }
         }
 
-        return new XYZ(xyz[0], xyz[1], xyz[2]);
+        return new Vector(xyz[0], xyz[1], xyz[2]);
     }
 
     protected Location getLocationFromString(String str, World world) {
@@ -108,7 +108,7 @@ public abstract class ConfigPart {
             // Bukkit.broadcastMessage(Lang.get("errors.mapconfig.wrongparselocation1", xyz_yp.length, str));
             return new Location(world, 0, 0, 0);
         } 
-        XYZ coords = getXYZfromString(xyz_yp[0]);
+        Vector coords = getVectorfromString(xyz_yp[0]);
 
 
         //raw_yp[0] = yaw, raw_yp[1] = pitch
@@ -126,7 +126,7 @@ public abstract class ConfigPart {
             }
         }
 
-        Location finalLoc = coords.asLocation(world);
+        Location finalLoc = new Location(world, coords.getX(), coords.getY(), coords.getZ());
         finalLoc.setYaw(yp[0]);
         finalLoc.setPitch(yp[1]);
         return finalLoc;

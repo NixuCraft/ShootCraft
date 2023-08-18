@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import lombok.Getter;
 import me.nixuge.GameManager;
@@ -74,37 +75,42 @@ public class Gun {
         return delay <= 0; // Could be == 0 but just in case
     }
 
-    // public Set<ShootingPlayer> fire(GameManager gameMgr, Player p) {
     public void fire() {
         setDelay(Config.gun.getGunDelayDuration());
         
         Set<Player> hitPlayers = new HashSet<>();
         String name = player.getBukkitPlayer().getDisplayName();
-        // int hitCount = 0;
 
         // values straight from the player
         Player p = player.getBukkitPlayer();
         Location loc = p.getLocation();
-        double yaw = loc.getYaw();
-        double pitch = loc.getPitch();
+        Vector direction = loc.getDirection().divide(new Vector(2, 2, 2));
         double x = loc.getX();
         double y = loc.getY() + 1.5; //getY = base of feet, +1.5 = head
         double z = loc.getZ();
 
-        // values computed
-        // TODO?: see if I can divide those by 2?
-        // So I can have a more accurate particle trail
-        // (currently doesn't work due to yMultiply)
-        double yMinus = Math.sin(Math.toRadians(pitch));
-        double yMultiply = getYMultiplyOffset(yMinus) ;
-        double xMinus = Math.sin(Math.toRadians(yaw)) * yMultiply;
-        double zPlus = Math.cos(Math.toRadians(yaw)) * yMultiply;
+        // TODO: if possible, redo this detection in a better way
+        // Basically before the particles loop, calculate
+        // the players that have been hit.
+        // https://www.spigotmc.org/threads/hitboxes-and-ray-tracing.174358/page-3
+        // https://bukkit.org/threads/using-rays-to-quickly-and-accurately-detect-hitbox-collisions.441877/
+        // 
+        // EDIT: for now in standby.
+        // Only minimal gains from this so not doing it yet. For retry later:
+        // (scroll, initial code is bad) https://www.spigotmc.org/threads/particle-ray-with-block-hitbox.327728/
+        //
+        // https://www.spigotmc.org/threads/hitboxes-and-ray-tracing.174358/
+        // -> https://pastebin.com/eHQawAme
+        // -> https://pastebin.com/PV63ZkQy
+        //
+        // https://gist.github.com/aadnk/7123926
 
-        for (int i = 0; i < 60; i++) {
-            x -= xMinus;
-            z += zPlus;
-            y -= yMinus;
 
+        for (int i = 0; i < 120; i++) {
+            x += direction.getX();
+            z += direction.getZ();
+            y += direction.getY();
+            
             new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null)
                     .sendPacketAllPlayers();
 
@@ -113,13 +119,6 @@ public class Gun {
                 // If hits wall (may be bypassable if through corners)
                 break;
             }
-
-
-            // TODO: if possible, redo this detection in a better way
-            // Basically before the particles loop, calculate
-            // the players that have been hit.
-            // https://www.spigotmc.org/threads/hitboxes-and-ray-tracing.174358/page-3
-            // https://bukkit.org/threads/using-rays-to-quickly-and-accurately-detect-hitbox-collisions.441877/
 
             Collection<Entity> nearbyEntities = world.getNearbyEntities(loc, .2, .2, .2); // VALUES TO TWEAK
             
@@ -143,22 +142,5 @@ public class Gun {
                 player.addLife();
             }
         }
-    }
-    
-    /**
-     * This function is used to calculate the multiply offset for X/Z
-     * based on how up/down the player is looking.
-     * Without those, the most players can shoot at is diagonal.
-     * With those, all orientations are fine
-     * 
-     * @param yMinus determines how many blocks far down the next particle will be
-     */
-    private static double getYMultiplyOffset(double yMinus) {
-        // get the absolute value of yMinus
-        double yMultiply = yMinus > 0 ? yMinus : -yMinus;
-
-        // function sqrt(r² - x²)
-        // makes a nice quarter cycle
-        return Math.sqrt(1 - (yMultiply * yMultiply));
     }
 }

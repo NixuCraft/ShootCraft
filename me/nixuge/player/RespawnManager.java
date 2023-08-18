@@ -1,6 +1,8 @@
 package me.nixuge.player;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,6 +43,7 @@ public class RespawnManager {
 
     private void commonInitialSpawnRespawn() {
         player.setProtected(true);
+        player.getBukkitPlayer().getInventory().setArmorContents(new ItemStack[]{null, null, new ItemStack(Material.GOLD_CHESTPLATE), null});
         player.getBoost().removeAndRegainBoostHunger();
         
         tpToRespawn();
@@ -81,6 +84,7 @@ public class RespawnManager {
                 tempTicks--;
                 if (tempTicks == 0) {
                     player.setProtected(false);
+                    player.getBukkitPlayer().getInventory().setArmorContents(new ItemStack[]{null, null, null, null}); //TODO: handle differently if by default got more than 1 life
                     this.cancel();
                 }
             }
