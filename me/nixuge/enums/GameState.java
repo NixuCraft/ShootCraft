@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 
 import lombok.Getter;
 import me.nixuge.ShootCraft;
+import me.nixuge.listeners.playing.BreakBlockListener;
 import me.nixuge.listeners.playing.HotbarItemHeldListener;
 import me.nixuge.listeners.playing.HungerHealthChangeListener;
 import me.nixuge.listeners.playing.PlayerClickListener;
@@ -26,7 +27,8 @@ public enum GameState {
         PlayerClickListener.class,
         PlayerJoinLeaveListener.class,
         PlayerInventoryListener.class,
-        HungerHealthChangeListener.class
+        HungerHealthChangeListener.class,
+        BreakBlockListener.class
     });
 
     private final Class<?>[] classes;
