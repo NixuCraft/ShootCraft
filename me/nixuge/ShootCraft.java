@@ -1,6 +1,5 @@
 package me.nixuge;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,7 +39,11 @@ public class ShootCraft extends JavaPlugin {
         gameMgr.broadcastGamePrefix("Plugin enabled successfully.");
     }
 
-    // LEFT TODO FROM CONFIG:
+    // TODO left:
     // - maxGameDuration
     // - maxPlayerCount
+    // - XP bar for shootgun reloading
+    // - scoreboard
+    // - game ending
+
 }

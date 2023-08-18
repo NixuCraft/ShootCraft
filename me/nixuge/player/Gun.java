@@ -47,6 +47,11 @@ public class Gun {
     public void onRespawn() {
         setDelay(Config.spawn.getRespawnDuration());
     }
+
+    public void setXpPercentage(int current, int max) {
+        float xp = ((float)delay / max);
+        player.getBukkitPlayer().setExp(1 - xp);
+    }
  
     public void setDelay(int newDelay) {
         player.getBukkitPlayer().getInventory().setItem(4, Gun.getItemDisabled());
@@ -55,7 +60,9 @@ public class Gun {
             @Override
             public void run() {
                 delay--;
+                setXpPercentage(delay, newDelay);
                 if (delay == 0) {
+                    setXpPercentage(1, 1);
                     player.getBukkitPlayer().getInventory().setItem(4, Gun.getItemEnabled());
                     this.cancel();
                 }   
