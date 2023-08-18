@@ -20,7 +20,7 @@ public class MapConfig extends ConfigPart {
         world = Bukkit.getWorld(getString("world", "world"));
         spawns = new ArrayList<>();
         for (String coords : getStringList("spawns", null)) { // crash when not set 
-            spawns.add(getXYZfromString(coords).asLocation(world));
+            spawns.add(getLocationFromString(coords, world));
         } 
     }
 

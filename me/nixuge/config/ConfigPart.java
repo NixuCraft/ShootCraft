@@ -2,6 +2,8 @@ package me.nixuge.config;
 
 import java.util.List;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 import me.nixuge.maths.XYZ;
@@ -98,5 +100,35 @@ public abstract class ConfigPart {
         }
 
         return new XYZ(xyz[0], xyz[1], xyz[2]);
+    }
+
+    protected Location getLocationFromString(String str, World world) {
+        String[] xyz_yp = str.split(", ");
+        if (xyz_yp.length != 2) {
+            // Bukkit.broadcastMessage(Lang.get("errors.mapconfig.wrongparselocation1", xyz_yp.length, str));
+            return new Location(world, 0, 0, 0);
+        } 
+        XYZ coords = getXYZfromString(xyz_yp[0]);
+
+
+        //raw_yp[0] = yaw, raw_yp[1] = pitch
+        String[] raw_yp = xyz_yp[1].split(" ");
+
+        int[] yp = new int[2];
+
+        for (int i = 0; i < 2; i++) {
+            String part = raw_yp[i];
+            try {
+                yp[i] = Integer.parseInt(part);
+            } catch (NumberFormatException e) {
+                // Bukkit.broadcastMessage(Lang.get("errors.mapconfig.wrongparselocation2", part, str));
+                yp[i] = 0;
+            }
+        }
+
+        Location finalLoc = coords.asLocation(world);
+        finalLoc.setYaw(yp[0]);
+        finalLoc.setPitch(yp[1]);
+        return finalLoc;
     }
 }

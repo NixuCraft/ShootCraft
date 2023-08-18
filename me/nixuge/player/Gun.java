@@ -20,7 +20,6 @@ import me.nixuge.config.Config;
 import me.nixuge.reflections.packets.HandleParticleSend;
 import me.nixuge.reflections.packets.ParticleEnum;
 import me.nixuge.utils.ItemBuilder;
-import me.nixuge.utils.logger.Logger;
 
 public class Gun {
     @Getter
@@ -46,7 +45,7 @@ public class Gun {
     }
 
     public void onRespawn() {
-        setDelay(Config.delay.getRespawnDuration());
+        setDelay(Config.spawn.getRespawnDuration());
     }
  
     public void setDelay(int newDelay) {
@@ -70,7 +69,7 @@ public class Gun {
 
     // public Set<ShootingPlayer> fire(GameManager gameMgr, Player p) {
     public void fire() {
-        setDelay(Config.delay.getGunDelayDuration());
+        setDelay(Config.gun.getGunDelayDuration());
         
         Set<Player> hitPlayers = new HashSet<>();
         String name = player.getBukkitPlayer().getDisplayName();
@@ -86,12 +85,15 @@ public class Gun {
         double z = loc.getZ();
 
         // values computed
-        double yMinus = Math.sin(Math.toRadians(pitch)) / 2;
-        double yMultiply = getYMultiplyOffset(yMinus);
-        double xMinus = (Math.sin(Math.toRadians(yaw)) * yMultiply) / 2;
-        double zPlus = (Math.cos(Math.toRadians(yaw)) * yMultiply) / 2;
+        // TODO?: see if I can divide those by 2?
+        // So I can have a more accurate particle trail
+        // (currently doesn't work due to yMultiply)
+        double yMinus = Math.sin(Math.toRadians(pitch));
+        double yMultiply = getYMultiplyOffset(yMinus) ;
+        double xMinus = Math.sin(Math.toRadians(yaw)) * yMultiply;
+        double zPlus = Math.cos(Math.toRadians(yaw)) * yMultiply;
 
-        for (int i = 0; i < 120; i++) {
+        for (int i = 0; i < 60; i++) {
             x -= xMinus;
             z += zPlus;
             y -= yMinus;
@@ -109,6 +111,8 @@ public class Gun {
             // TODO: if possible, redo this detection in a better way
             // Basically before the particles loop, calculate
             // the players that have been hit.
+            // https://www.spigotmc.org/threads/hitboxes-and-ray-tracing.174358/page-3
+            // https://bukkit.org/threads/using-rays-to-quickly-and-accurately-detect-hitbox-collisions.441877/
 
             Collection<Entity> nearbyEntities = world.getNearbyEntities(loc, .2, .2, .2); // VALUES TO TWEAK
             

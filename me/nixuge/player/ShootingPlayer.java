@@ -28,6 +28,7 @@ public class ShootingPlayer {
 
     @Getter
     private Player bukkitPlayer;
+    @SuppressWarnings("unused")
     private boolean isOnline;
 
     public ShootingPlayer(Player bukkitPlayer) {
@@ -53,7 +54,6 @@ public class ShootingPlayer {
         this.currentLives = Config.lives.getStartingLives();
         this.killStreak = 0;
         onInitOrRelog();
-        bukkitPlayer.setFoodLevel(20 - Config.game.getHungerLossOnBoost());
         respawnManager.initialSpawn();
     }
 

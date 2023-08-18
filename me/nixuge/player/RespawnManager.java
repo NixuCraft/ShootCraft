@@ -24,21 +24,26 @@ public class RespawnManager {
         p.getInventory().clear();
         p.getInventory().setItem(4, Gun.getItemEnabled());
 
-        player.setProtected(true);
-
         setHealthRespawn(true);
 
-        tpToRespawn();
+        commonInitialSpawnRespawn();
+
         removeSpawnProtAfterDelay();
     }
 
     public void respawnAfterKill() {
-        player.setProtected(true);
-
         setHealthRespawn(false);
 
+        commonInitialSpawnRespawn();
+
+        waitForRespawnDurationAndRemoveSpawnProt();
+    }
+
+    private void commonInitialSpawnRespawn() {
+        player.setProtected(true);
+        player.getBoost().removeAndRegainBoostHunger();
+        
         tpToRespawn();
-        waitForRespawnDuration();
     }
 
     private void setHealthRespawn(boolean initialSpawn) {
@@ -53,8 +58,8 @@ public class RespawnManager {
         player.getBukkitPlayer().teleport(Config.map.getRandomSpawn());
     }
 
-    private void waitForRespawnDuration() {
-        tempTicks = Config.delay.getRespawnDuration();
+    private void waitForRespawnDurationAndRemoveSpawnProt() {
+        tempTicks = Config.spawn.getRespawnDuration();
         setRespawnEffect(tempTicks);
         new BukkitRunnable() {
             @Override
@@ -69,7 +74,7 @@ public class RespawnManager {
     }
 
     private void removeSpawnProtAfterDelay() {
-        tempTicks = Config.delay.getSpawnProtectionDuration();
+        tempTicks = Config.spawn.getSpawnProtectionDuration();
         new BukkitRunnable() {
             @Override
             public void run() {

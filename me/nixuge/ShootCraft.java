@@ -34,19 +34,13 @@ public class ShootCraft extends JavaPlugin {
 
         playerMgr = new PlayerManager();
         gameMgr = new GameManager();
-        // gameManager = new GameManager();
 
         getCommand("force_start").setExecutor(new ForceStartCommand());
 
-        // pm.registerEvents(new InventoryListener(), this);
-
-        Bukkit.broadcastMessage("PLugin enablezd");
+        gameMgr.broadcastGamePrefix("Plugin enabled successfully.");
     }
 
     // LEFT TODO FROM CONFIG:
     // - maxGameDuration
     // - maxPlayerCount
-    // - halfHungerLossOnBoost
-    //
-    // - ticksPerHalfHungerRegain
 }
