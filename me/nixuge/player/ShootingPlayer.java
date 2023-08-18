@@ -3,6 +3,7 @@ package me.nixuge.player;
 import org.bukkit.entity.Player;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.nixuge.GameManager;
 import me.nixuge.ShootCraft;
 import me.nixuge.config.Config;
@@ -14,11 +15,16 @@ public class ShootingPlayer {
     private Gun gun;
     @Getter
     private Boost boost;
+    private RespawnManager respawnManager;
 
     private int currentLives;
     private int killStreak;
     @Getter
     private int totalKills;
+
+    @Getter
+    @Setter
+    private boolean isProtected;
 
     @Getter
     private Player bukkitPlayer;
@@ -30,29 +36,31 @@ public class ShootingPlayer {
         this.isOnline = true;
         this.gun = new Gun(this);
         this.boost = new Boost(this);
-        // Not sure if that should be in the constructor
-        setMaxHealth();
-        setHealthRespawn(true);
+        initialSpawn();
     }
 
-    // Bit verbose but yeah idk this should be fine
     private void setMaxHealth() {
         bukkitPlayer.setMaxHealth(Config.lives.getMaxLives() * 2);
     }
-    private void setHealthRespawn(boolean initialSpawn) {
-        int newHealth = (initialSpawn) ?
-            Config.lives.getRespawnLives() * 2 :
-            Config.lives.getStartingLives() * 2;
-        
-        bukkitPlayer.setHealth(newHealth);
+
+    public void initialSpawn() {
+        this.currentLives = Config.lives.getStartingLives();
+        this.killStreak = 0;
+        setMaxHealth();
+        respawnManager.initialSpawn();
     }
+
+    // Bit verbose but yeah idk this should be fine
 
     public void rejoin(Player player) {
         this.bukkitPlayer = player;
         this.isOnline = true;
         // May need to be delayed 1 tick
         setMaxHealth();
-        setHealthRespawn(false);
+
+        bukkitPlayer.getInventory().clear();
+
+        kill();
     }
 
     public void leave() {
@@ -81,6 +89,9 @@ public class ShootingPlayer {
     }
 
     public void hit(String killer) {
+        if (this.isProtected)
+            return;
+            
         if (this.currentLives == 1) {
             kill();
             gameMgr.broadcastGame(bukkitPlayer.getCustomName() + " §cgot killed by " + killer);
@@ -91,11 +102,9 @@ public class ShootingPlayer {
     }
 
     private void kill() {
-        gun.setDelay(Config.delay.getRespawnDuration());
+        gun.onRespawn();
         this.currentLives = Config.lives.getStartingLives();
         this.killStreak = 0;
-        setHealthRespawn(false);
-
-        // TODO: finish (respawn etc)
+        respawnManager.respawnAfterKill();
     }
 }

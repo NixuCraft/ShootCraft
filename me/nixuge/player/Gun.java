@@ -7,33 +7,60 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.Getter;
-import lombok.Setter;
 import me.nixuge.GameManager;
 import me.nixuge.PlayerManager;
 import me.nixuge.ShootCraft;
 import me.nixuge.config.Config;
 import me.nixuge.reflections.packets.HandleParticleSend;
 import me.nixuge.reflections.packets.ParticleEnum;
+import me.nixuge.utils.ItemBuilder;
 import me.nixuge.utils.logger.Logger;
 
 public class Gun {
     @Getter
-    @Setter
+    private static ItemStack itemEnabled = new ItemBuilder(Material.GOLD_HOE).itemName("§2[Enabled]§r ShootGun").build();
+    @Getter
+    private static ItemStack itemDisabled = new ItemBuilder(Material.STICK).itemName("§7[Reloading]§r ShootGun").build();
+
+    @Getter
     private int delay;
 
     private World world;
     private ShootingPlayer player;
+    private ShootCraft instance;
     private GameManager gameMgr;
     private PlayerManager playerMgr;
 
     public Gun(ShootingPlayer player) {
         this.world = Config.map.getWorld();
-        ShootCraft instance = ShootCraft.getInstance();
+        this.instance = ShootCraft.getInstance();
         this.playerMgr = instance.getPlayerMgr();
         this.gameMgr = instance.getGameMgr();
         this.player = player;
+    }
+
+    public void onRespawn() {
+        player.getBukkitPlayer().getInventory().setItem(31, Gun.getItemDisabled());
+        setDelay(Config.delay.getRespawnDuration());
+    }
+ 
+    public void setDelay(int newDelay) {
+        this.delay = newDelay;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                delay--;
+                Logger.logBC("lowered timer ! (gun) " + delay);
+                if (delay == 0) {
+                    player.getBukkitPlayer().getInventory().setItem(31, Gun.getItemDisabled());
+                    this.cancel();
+                }   
+            }
+        }.runTaskTimerAsynchronously(instance, 0, 1);
     }
 
     public boolean canFire() {
@@ -42,6 +69,7 @@ public class Gun {
 
     // public Set<ShootingPlayer> fire(GameManager gameMgr, Player p) {
     public void fire() {
+        setDelay(Config.delay.getGunDelayDuration());
         // Set<Entity> hitPlayers = new HashSet<>();
         int hitCount = 0;
 

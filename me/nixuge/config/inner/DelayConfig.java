@@ -11,10 +11,12 @@ public class DelayConfig extends ConfigPart {
         super(conf);
         ticksPerHungerRegain = getInt("ticksPerHalfHungerRegain", 10);
         respawnDuration = getInt("respawnDuration", 20);
+        gunDelayDuration = getInt("gunDelayDuration", 50);
         spawnProtectionDuration = getInt("spawnProtectionDuration", 10);
     }
     
     private final int ticksPerHungerRegain;
     private final int respawnDuration;
+    private final int gunDelayDuration;
     private final int spawnProtectionDuration;
 }

@@ -52,7 +52,9 @@ public class ShootCraft extends JavaPlugin {
     // - maxPlayerCount
     // - halfHungerLossOnBoost
     //
-    // - all delays
+    // - ticksPerHalfHungerRegain
+    // - spawnProtectionDuration
+    // - respawnDuration (not fully)
     //
     // - spawns
 }
