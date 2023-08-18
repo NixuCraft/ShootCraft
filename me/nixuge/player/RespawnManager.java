@@ -27,6 +27,8 @@ public class RespawnManager {
         p.getInventory().setItem(4, Gun.getItemEnabled());
 
         setHealthRespawn(true);
+        
+        player.getBoost().removeAndRegainBoostHunger();
 
         commonInitialSpawnRespawn();
 
@@ -44,7 +46,6 @@ public class RespawnManager {
     private void commonInitialSpawnRespawn() {
         player.setProtected(true);
         player.getBukkitPlayer().getInventory().setArmorContents(new ItemStack[]{null, null, new ItemStack(Material.GOLD_CHESTPLATE), null});
-        player.getBoost().removeAndRegainBoostHunger();
         
         tpToRespawn();
     }
@@ -83,8 +84,8 @@ public class RespawnManager {
             public void run() {
                 tempTicks--;
                 if (tempTicks == 0) {
-                    player.setProtected(false);
                     player.getBukkitPlayer().getInventory().setArmorContents(new ItemStack[]{null, null, null, null}); //TODO: handle differently if by default got more than 1 life
+                    player.setProtected(false);
                     this.cancel();
                 }
             }
