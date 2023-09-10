@@ -2,7 +2,8 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "/home/nix/coding/servers/1.8_serv/cache/patched_1.8.8.jar",
-        "/home/nix/Downloads/lombok(1).jar"
+        "/home/nix/Downloads/lombok(1).jar",
+        "/home/nix/Downloads/jars/lombok(1).jar"
     ],
     "java.project.exportJar.targetPath": "/home/nix/coding/servers/1.8_serv/plugins/${workspaceFolderBasename}.jar",
     "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx8G -Xms100m",

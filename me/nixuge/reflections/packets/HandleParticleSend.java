@@ -3,16 +3,11 @@ package me.nixuge.reflections.packets;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import me.nixuge.reflections.HandleUtils;
-import me.nixuge.reflections.ReflectionUtilsAbstract;
-import me.nixuge.reflections.send.HandleSendPacket;
+import me.nixuge.reflections.PacketHandlerAbstract;
 import me.nixuge.utils.logger.LogLevel;
 import me.nixuge.utils.logger.Logger;
 
-public class HandleParticleSend extends ReflectionUtilsAbstract {
+public class HandleParticleSend extends PacketHandlerAbstract {
     private static Class<?> packetClass = getNMSClass("PacketPlayOutWorldParticles");
     private static Class<?> enumClass = getNMSClass("EnumParticle");
 
@@ -79,18 +74,6 @@ public class HandleParticleSend extends ReflectionUtilsAbstract {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public void sendPacketAllPlayers() {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            sendPacketPlayer(p);
-        }
-    }
-    
-    public void sendPacketPlayer(Player p) {
-        Object playerHandle = HandleUtils.getHandleField(p, "playerConnection");
-        
-        HandleSendPacket.send(playerHandle, getPacket());
     }
 }
 
