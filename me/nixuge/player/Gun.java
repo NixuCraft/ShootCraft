@@ -110,9 +110,6 @@ public class Gun {
             x += direction.getX();
             z += direction.getZ();
             y += direction.getY();
-            
-            new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null)
-                    .sendPacketAllPlayers();
 
             loc = new Location(world, x, y, z);
             if (loc.getBlock().getType() != Material.AIR) {
@@ -120,9 +117,11 @@ public class Gun {
                 break;
             }
 
+            // Could use a better system with loc.distance(otherloc) <= x
+            // but that's already setup and working relatively well
             Collection<Entity> nearbyEntities = world.getNearbyEntities(loc, .2, .2, .2); // VALUES TO TWEAK
             
-                
+            
             for (Entity e : nearbyEntities) {
                 if (!(e instanceof Player)) 
                     continue;
@@ -134,6 +133,12 @@ public class Gun {
                 if(playerMgr.getShootingPlayer(hitPlayer).hit(name))
                     hitPlayers.add(hitPlayer);  
             }
+
+            // Only send 1 in 2 particle, so that checks always run
+            // but particles don't appear clogged.
+            if (i % 2 == 0)
+                new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null)
+                    .sendPacketAllPlayers();
         }
         int hitCount = hitPlayers.size();
         if (hitCount > 1) {
