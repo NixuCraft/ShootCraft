@@ -76,8 +76,17 @@ public class ShootingPlayer {
     public void addKill() {
         this.totalKills++;
         this.killStreak++;
-        if (Config.lives.getLiveOnKillStreak().contains(killStreak))
-            gameMgr.broadcastGamePrefix(bukkitPlayer.getDisplayName() + " got a killstreak of " + killStreak + ". He gained a life.");
+        if (Config.lives.getLiveOnKillStreak().contains(killStreak)) {
+            int diff = Config.lives.getMaxLives() - (int)(bukkitPlayer.getHealth() / 2);
+            if (diff >= 1) {
+                gameMgr.broadcastGamePrefix(bukkitPlayer.getDisplayName() + " got a killstreak of " + killStreak + ". He gained a life.");
+                this.currentLives++;
+                bukkitPlayer.setHealth(currentLives * 2);
+            } else {
+                gameMgr.broadcastGamePrefix(bukkitPlayer.getDisplayName() + " got a killstreak of " + killStreak + ". He already has maxxed lives.");
+            }
+        }
+
 
         if (Config.game.isKfwEnabled() && Config.game.getKillsForWin() >= totalKills) {
             gameMgr.broadcastGamePrefix("§l§6GAME ENDED !");

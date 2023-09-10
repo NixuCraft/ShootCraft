@@ -147,5 +147,8 @@ public class Gun {
                 player.addLife();
             }
         }
+        for (int i = 0; i < hitCount; i++) {
+            player.addKill();
+        }
     }
 }
