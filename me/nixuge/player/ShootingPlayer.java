@@ -1,6 +1,8 @@
 package me.nixuge.player;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -77,16 +79,9 @@ public class ShootingPlayer {
         this.totalKills++;
         this.killStreak++;
         if (Config.lives.getLiveOnKillStreak().contains(killStreak)) {
-            int diff = Config.lives.getMaxLives() - (int)(bukkitPlayer.getHealth() / 2);
-            if (diff >= 1) {
-                gameMgr.broadcastGamePrefix(bukkitPlayer.getDisplayName() + " got a killstreak of " + killStreak + ". He gained a life.");
-                this.currentLives++;
-                bukkitPlayer.setHealth(currentLives * 2);
-            } else {
-                gameMgr.broadcastGamePrefix(bukkitPlayer.getDisplayName() + " got a killstreak of " + killStreak + ". He already has maxxed lives.");
-            }
+            String ending = (addLife()) ? ". He gained a life." : ". He already has maxxed lives.";
+            gameMgr.broadcastGamePrefix(bukkitPlayer.getDisplayName() + " got a killstreak of " + killStreak + ending);
         }
-
 
         if (Config.game.isKfwEnabled() && Config.game.getKillsForWin() >= totalKills) {
             gameMgr.broadcastGamePrefix("§l§6GAME ENDED !");
@@ -94,12 +89,15 @@ public class ShootingPlayer {
         }
     }
 
-    public void addLife() {
+    public boolean addLife() {
         if (this.currentLives >= Config.lives.getMaxLives())
-            return;
+            return false;
         this.currentLives++;
         bukkitPlayer.setHealth(currentLives * 2);
-        // TODO: add chestplate
+        
+        bukkitPlayer.getInventory().setArmorContents(new ItemStack[]{null, null, new ItemStack(Material.DIAMOND_CHESTPLATE), null});
+
+        return true;
     }
 
 
@@ -117,6 +115,10 @@ public class ShootingPlayer {
         } else {
             this.currentLives--;
             bukkitPlayer.setHealth(currentLives * 2);
+            // Check after to see if on last life or not
+            if (this.currentLives == 1) {
+                bukkitPlayer.getInventory().setArmorContents(new ItemStack[]{null, null, null, null});
+            }
         }
         return true;
     }
