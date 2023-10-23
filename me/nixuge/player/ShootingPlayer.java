@@ -49,6 +49,7 @@ public class ShootingPlayer {
  
     private void onInitOrRelog() {
         setMaxHealth();
+        bukkitPlayer.getInventory().clear();
         bukkitPlayer.getInventory().setHeldItemSlot(4);
     }
 
@@ -64,8 +65,6 @@ public class ShootingPlayer {
         this.isOnline = true;
         
         onInitOrRelog(); // May need to be delayed 1 tick
-
-        bukkitPlayer.getInventory().clear();
 
         kill();
     }

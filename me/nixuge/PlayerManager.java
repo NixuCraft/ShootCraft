@@ -32,6 +32,8 @@ public class PlayerManager {
         this.onlinePlayers.add(p);
         
         onlinePlayersMap.put(player, p);
+
+        p.rejoin(player);
     }
 
     public void rejoinPlayer(Player bukkitPlayer) {

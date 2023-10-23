@@ -1,13 +1,11 @@
 package me.nixuge;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import lombok.Getter;
 import me.nixuge.commands.ForceStartCommand;
 import me.nixuge.config.Config;
-import me.nixuge.utils.TitleUtils;
 
 public class ShootCraft extends JavaPlugin {
     @Getter
@@ -46,6 +44,5 @@ public class ShootCraft extends JavaPlugin {
     // - maxPlayerCount
     // - scoreboard
     // - game ending
-    // - move TitleUtils to reflections for multi version compatibility
     // - actually use TitleUtils
 }

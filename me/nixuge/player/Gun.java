@@ -136,9 +136,9 @@ public class Gun {
 
             // Only send 1 in 2 particle, so that checks always run
             // but particles don't appear clogged.
-            if (i % 2 == 0)
-                new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null)
-                    .sendPacketAllPlayers();
+            // if (i % 2 == 0)
+            new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null)
+                .sendPacketAllPlayers();
         }
         int hitCount = hitPlayers.size();
         if (hitCount > 1) {
