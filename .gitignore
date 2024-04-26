@@ -1,0 +1,24 @@
+.gradle/
+build/
+bin/
+
+# Explanation:
+# April 2nd, 2024. (should've made this a day earlier with how this thing works)
+# Tried to get hotswap working on VSCode with gradle. Unfortunately, Gradle for VSCode doesn't support hotswap (🤡),
+# So I had to make things work using Gradle alone
+# Fought for a few hours trying to get the config to recognize, turns out it needs to be inside of the jar + 
+# it doesn't log ANYTHING when it gets loaded (even invalid properties) so you don't actually know if it's
+# loaded until you actually have one of its properties working.
+# Once that was done, I tried simply watching for "classes/java/main". Problem is when I did that, I got:
+# HOTSWAP AGENT: WARNING (org.hotswap.agent.watch.nio.WatcherNIO2) - Watcher on /home/nix/coding/minecraft/LobbyPlugin/build/classes/java/main/me/nixuge/lobby/lobbygame/snake not valid, removing path=
+# with any classes I was doing. Actually the hotswap was half working, because after a /rl it did get applied for some reason.
+# However, I wanted to reload things instantly.
+# What I did was make a new task (customCopyChangedClasses, gpt helped) that itself gets called once ./gradlew classes 
+# is done and that's going to compare the output of gradles classes & the content of another_build,
+# and copy the changed files inside of another_build.
+# (before i had it just copy the entire dir, but that made the server reload the whole plugin which is meh.)
+# This is the reason there's an another_build folder here.
+another_build/
+
+# Placed there because I don't want to accidentally delete it (like i do for .gradle/)
+gradle/counters.properties
