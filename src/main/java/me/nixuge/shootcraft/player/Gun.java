@@ -15,8 +15,8 @@ import org.bukkit.util.Vector;
 
 import lombok.Getter;
 import me.nixuge.shootcraft.config.Config;
-import me.nixuge.shootcraft.reflections.packets.HandleParticleSend;
-import me.nixuge.shootcraft.reflections.packets.ParticleEnum;
+import me.nixuge.shootcraft.nms.NMSParticles;
+import me.nixuge.shootcraft.nms.ParticleEnum;
 import me.nixuge.shootcraft.utils.ItemBuilder;
 import me.nixuge.shootcraft.GameManager;
 import me.nixuge.shootcraft.PlayerManager;
@@ -137,8 +137,7 @@ public class Gun {
             // Only send 1 in 2 particle, so that checks always run
             // but particles don't appear clogged.
             // if (i % 2 == 0)
-            new HandleParticleSend(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null)
-                .sendPacketAllPlayers();
+            NMSParticles.makeParticle(ParticleEnum.FIREWORKS_SPARK, x, y, z, 0, 0, 0, 0, 1, null);
         }
         int hitCount = hitPlayers.size();
         if (hitCount > 1) {

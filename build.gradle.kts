@@ -8,6 +8,7 @@ java {
 }
 
 repositories {
+    mavenLocal()
     maven("https://jitpack.io")
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
@@ -21,8 +22,8 @@ dependencies {
     // Server
     compileOnly("org.github.paperspigot:paperspigot-api:1.8.8-R0.1-SNAPSHOT")
     // iirc below include NMS
-    // compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
-    // compileOnly("org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT")
+    // compileOnly("org.bukkit:craftbukkit:1.8.8-R0.1-SNAPSHOT")
 
     // Scoreboard
     val scoreboardLibraryVersion = "2.1.6"

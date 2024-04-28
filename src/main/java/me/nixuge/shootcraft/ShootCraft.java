@@ -38,11 +38,4 @@ public class ShootCraft extends JavaPlugin {
 
         gameMgr.broadcastGamePrefix("Plugin enabled successfully.");
     }
-
-    // TODO left:
-    // - maxGameDuration
-    // - maxPlayerCount
-    // - scoreboard
-    // - game ending
-    // - actually use TitleUtils
 }

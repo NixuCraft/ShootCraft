@@ -1,4 +1,4 @@
-package me.nixuge.shootcraft.reflections.packets;
+package me.nixuge.shootcraft.nms;
 
 public enum ParticleEnum {
     // Bukkit basically doesn't have a proper
