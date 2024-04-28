@@ -3,6 +3,7 @@ package me.nixuge.shootcraft.enums;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -14,8 +15,6 @@ import me.nixuge.shootcraft.listeners.playing.HungerHealthChangeListener;
 import me.nixuge.shootcraft.listeners.playing.PlayerClickListener;
 import me.nixuge.shootcraft.listeners.playing.PlayerInventoryListener;
 import me.nixuge.shootcraft.listeners.playing.PlayerJoinLeaveListener;
-import me.nixuge.shootcraft.utils.logger.LogLevel;
-import me.nixuge.shootcraft.utils.logger.Logger;
 import me.nixuge.shootcraft.ShootCraft;
 
 public enum GameState {
@@ -30,6 +29,8 @@ public enum GameState {
         HungerHealthChangeListener.class,
         BreakBlockListener.class
     });
+
+    private static Logger logger = ShootCraft.getInstance().getLogger();
 
     private final Class<?>[] classes;
     private List<Listener> instances;
@@ -56,7 +57,7 @@ public enum GameState {
     @Getter
     private static GameState currentState;
     public static void setGameState(GameState gameState) {
-        Logger.log(LogLevel.DEBUG, "Setting gamestate to " + gameState.toString());
+        logger.info("Setting gamestate to " + gameState.toString());
 
         // unregister previous listeners
         if (currentState != null) {
@@ -78,13 +79,13 @@ public enum GameState {
                 Listener listener = (Listener) cons.newInstance();
                 currentState.addInstance(listener);
                 instance.getPluginMgr().registerEvents(listener, instance);
-                Logger.log(LogLevel.DEBUG, "Registered listener: " + c.getSimpleName());
+                logger.info("Registered listener: " + c.getSimpleName());
             }
         } catch (Exception e) {
-            Logger.log(LogLevel.ERROR, "Exception happened while registering listener !");
+            logger.severe("Exception happened while registering listener !");
             e.printStackTrace();
         }
-        Logger.log(LogLevel.DEBUG, "Done setting gamestate");
+        logger.info("Done setting gamestate");
     }
 
 }

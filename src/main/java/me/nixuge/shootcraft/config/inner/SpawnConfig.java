@@ -1,16 +1,14 @@
 package me.nixuge.shootcraft.config.inner;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import lombok.Getter;
-import me.nixuge.shootcraft.config.ConfigPart;
+import me.nixuge.configurator.ConfigPart;
 
 @Getter
 public class SpawnConfig extends ConfigPart {
-    public SpawnConfig(ConfigurationSection conf) {
-        super(conf);
-        respawnDuration = getInt("respawnDuration", 20);
-        spawnProtectionDuration = getInt("spawnProtectionDuration", 10);
+    public SpawnConfig() {
+        super("spawn");
+        respawnDuration = getInt(rootConfig, "respawnDuration", 20);
+        spawnProtectionDuration = getInt(rootConfig, "spawnProtectionDuration", 10);
     }
     
     private final int respawnDuration;

@@ -27,7 +27,7 @@ public class ShootCraft extends JavaPlugin {
         instance = this;
 
         saveDefaultConfig();
-        Config.init(getConfig());
+        new Config().init(this);
 
         pluginMgr = getServer().getPluginManager();
 

@@ -17,7 +17,7 @@ import lombok.Getter;
 import me.nixuge.shootcraft.config.Config;
 import me.nixuge.shootcraft.nms.NMSParticles;
 import me.nixuge.shootcraft.nms.ParticleEnum;
-import me.nixuge.shootcraft.utils.ItemBuilder;
+import me.nixuge.nixutils.item.ItemBuilder;
 import me.nixuge.shootcraft.GameManager;
 import me.nixuge.shootcraft.PlayerManager;
 import me.nixuge.shootcraft.ShootCraft;

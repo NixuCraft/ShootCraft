@@ -7,19 +7,18 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 
 import lombok.Getter;
-import me.nixuge.shootcraft.config.ConfigPart;
+import me.nixuge.configurator.ConfigPart;
 
 @Getter
 public class MapConfig extends ConfigPart {
-    public MapConfig(ConfigurationSection conf) {
-        super(conf);
+    public MapConfig() {
+        super("map");
         this.rand = new Random();
-        world = Bukkit.getWorld(getString("world", "world"));
+        world = Bukkit.getWorld(getString(rootConfig, "world", "world"));
         spawns = new ArrayList<>();
-        for (String coords : getStringList("spawns", null)) { // crash when not set 
+        for (String coords : getStringList(rootConfig, "spawns", null)) { // crash when not set 
             spawns.add(getLocationFromString(coords, world));
         } 
     }

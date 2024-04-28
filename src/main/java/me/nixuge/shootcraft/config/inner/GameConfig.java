@@ -1,19 +1,17 @@
 package me.nixuge.shootcraft.config.inner;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import lombok.Getter;
-import me.nixuge.shootcraft.config.ConfigPart;
+import me.nixuge.configurator.ConfigPart;
 
 @Getter
 public class GameConfig extends ConfigPart {
-    public GameConfig(ConfigurationSection conf) {
-        super(conf);
-        killsForWin = getInt("killsForWin", 0);
+    public GameConfig() {
+        super("game");
+        killsForWin = getInt(rootConfig, "killsForWin", 0);
         kfwEnabled = killsForWin > 0;
-        maxGameDuration = getInt("maxGameDuration", 180);
-        maxPlayerCount = getInt("maxPlayerCount", 90);
-        broadcastPrefix = getString("broadcastPrefix", "§c[ShootCraft]§r ");
+        maxGameDuration = getInt(rootConfig, "maxGameDuration", 180);
+        maxPlayerCount = getInt(rootConfig, "maxPlayerCount", 90);
+        broadcastPrefix = getString(rootConfig, "broadcastPrefix", "§c[ShootCraft]§r ");
     }
     
     private final boolean kfwEnabled;
